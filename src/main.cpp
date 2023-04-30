@@ -63,7 +63,7 @@ int main(const int argc, const char** argv) {
 
     _LOG_FAIL_CHECK_(HashTable_status(&table) == 0, "error", ERROR_REPORTS, return_clean(EXIT_FAILURE), NULL, ENOMEM);
 
-    clock_t start_time = clock();
+    // clock_t start_time = clock();
 
     for (const char* word_ptr = word_list;
         word_ptr < word_list + sample_size * MAX_WORD_LENGTH;
@@ -94,16 +94,19 @@ int main(const int argc, const char** argv) {
     FILE* out_timetable = fopen(OUTPUT_TIMETABLE_NAME, "w");
     _LOG_FAIL_CHECK_(out_timetable, "error", ERROR_REPORTS, return_clean(EXIT_FAILURE), NULL, ENOENT);
 
-    fprintf(out_timetable, "word_count,time\n");
+    fprintf(out_timetable, "test_id,time\n");
 
+    for (unsigned test_id = 0; test_id < TEST_COUNT; ++test_id) {
+        clock_t start_time = clock();
 
-    for (size_t word_id = 0; word_id < sample_size; ++word_id) {
-        const char* word_ptr = word_list + word_id * MAX_WORD_LENGTH;
-        HashTable_find_value(&table, TESTED_HASH(word_ptr, word_ptr + MAX_WORD_LENGTH), word_ptr, strcmp);
+        for (unsigned repetition_id = 0; repetition_id < TEST_REPETITION; ++repetition_id)
+        for (size_t word_id = 0; word_id < sample_size; ++word_id) {
+            const char* word_ptr = word_list + word_id * MAX_WORD_LENGTH;
 
-        if (word_id % 128 == 0) {
-            fprintf(out_timetable, "%lu,%ld\n", word_id, clock() - start_time);
+            HashTable_find_value(&table, TESTED_HASH(word_ptr, word_ptr + MAX_WORD_LENGTH), word_ptr, strcmp);
         }
+
+        fprintf(out_timetable, "%u,%ld\n", test_id, clock() - start_time);
     }
 
     if (out_timetable) fclose(out_timetable);

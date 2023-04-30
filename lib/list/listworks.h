@@ -255,7 +255,7 @@ int List_inflate(List* const list, size_t new_capacity, int* const err_code) {
 
     _ListCell* current_cell = list->buffer->next;
     for (size_t id = 0; id < list->size; ++id) {
-        List_insert(&new_list, current_cell->content, List_find_position(&new_list, (int) new_list.size, err_code), err_code);
+        List_insert(&new_list, current_cell->content, List_find_position(&new_list, -1, err_code), err_code);
         current_cell = current_cell->next;
     }
 

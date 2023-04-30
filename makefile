@@ -1,17 +1,8 @@
 CC = g++
 PROFILER = valgrind
 
-CPP_BASE_FLAGS = -I./ -I./include/ -ggdb3 -std=c++2a -O2 -pie -mavx2
-
-CPP_SANITIZER_FLAGS = -fcheck-new 													\
--fsized-deallocation -fstack-protector -fstrict-overflow -flto-odr-type-merging		\
--fno-omit-frame-pointer -fPIE -fsanitize=address,bool,${strip 						\
-}bounds,enum,float-cast-overflow,float-divide-by-zero,${strip 						\
-}integer-divide-by-zero,leak,nonnull-attribute,null,object-size,return,${strip 		\
-}returns-nonnull-attribute,shift,signed-integer-overflow,undefined,${strip 			\
-}unreachable,vla-bound,vptr
-
-CPP_DEBUG_FLAGS = -D _DEBUG -Wall -Wextra -Weffc++ -march=corei7 	 				\
+CPP_BASE_FLAGS = -I./ -I./include/ -ggdb3 -std=c++2a -O2 -pie -march=corei7 -mavx2	\
+-Wall -Wextra -Weffc++				 	 											\
 -Waggressive-loop-optimizations -Wc++14-compat -Wmissing-declarations				\
 -Wcast-align -Wchar-subscripts -Wconditionally-supported							\
 -Wconversion -Wctor-dtor-privacy -Wempty-body -Wfloat-equal -Wformat-nonliteral		\
@@ -24,6 +15,16 @@ CPP_DEBUG_FLAGS = -D _DEBUG -Wall -Wextra -Weffc++ -march=corei7 	 				\
 -Wvariadic-macros -Wno-literal-suffix -Wno-missing-field-initializers				\
 -Wno-narrowing -Wno-old-style-cast -Wno-varargs -Wstack-protector					\
 -Wstack-usage=8192
+
+CPP_SANITIZER_FLAGS = -fcheck-new 													\
+-fsized-deallocation -fstack-protector -fstrict-overflow -flto-odr-type-merging		\
+-fno-omit-frame-pointer -fPIE -fsanitize=address,bool,${strip 						\
+}bounds,enum,float-cast-overflow,float-divide-by-zero,${strip 						\
+}integer-divide-by-zero,leak,nonnull-attribute,null,object-size,return,${strip 		\
+}returns-nonnull-attribute,shift,signed-integer-overflow,undefined,${strip 			\
+}unreachable,vla-bound,vptr
+
+CPP_DEBUG_FLAGS = -D _DEBUG
 
 CPPFLAGS = $(CPP_BASE_FLAGS) $(CPP_DEBUG_FLAGS)
 
@@ -65,11 +66,14 @@ main: asset $(addprefix $(PROJ_DIR)/, $(MAIN_OBJECTS))
 	@mkdir -p $(BLD_FOLDER)
 	@$(CC) $(addprefix $(PROJ_DIR)/, $(MAIN_OBJECTS)) $(CPPFLAGS) -o $(BLD_FOLDER)/$(MAIN_BLD_FULL_NAME)
 
-time: asset
-	make CASE_FLAGS="-D TESTED_HASH=murmur_hash -D PERFORMANCE_TEST"
+OPTIM_LVL = 0
+REPETITION = 1
 
 bmark: asset
-	make CASE_FLAGS="-D TESTED_HASH=murmur_hash -D PERFORMANCE_TEST" CPPFLAGS="$(CPP_BASE_FLAGS)"
+	make CASE_FLAGS="-D TESTED_HASH=murmur_hash -D OPTIM_LVL=$(OPTIM_LVL) -D PERFORMANCE_TEST" CPPFLAGS="$(CPP_BASE_FLAGS)"
+
+pfile: asset
+	make CASE_FLAGS="-D TESTED_HASH=murmur_hash -D OPTIM_LVL=$(OPTIM_LVL) -D TEST_COUNT=10 -D TEST_REPETITION=1 -D PERFORMANCE_TEST" CPPFLAGS="$(CPP_BASE_FLAGS)"
 
 asset:
 	@mkdir -p $(BLD_FOLDER)

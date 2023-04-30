@@ -26,4 +26,11 @@ static const unsigned MAX_WORD_LENGTH = 64;
     static const unsigned BUCKET_COUNT = 17;
 #endif
 
+#ifndef TEST_COUNT
+    static const unsigned TEST_COUNT = 32;
+#endif
+
+#ifndef TEST_REPETITION
+    static const unsigned TEST_REPETITION = 128;
+#endif
 #endif

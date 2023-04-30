@@ -23,7 +23,7 @@ bool check_ptr(const void* ptr) {
     return result != -1;
 }
 #else
-bool check_ptr(const void* ptr) { return 1; }
+bool check_ptr(const void* ptr) { SILENCE_UNUSED(ptr); return 1; }
 #endif
 
 hash_t get_simple_hash(const void* start, const void* end) {

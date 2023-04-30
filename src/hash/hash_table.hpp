@@ -12,6 +12,8 @@
 #ifndef HASH_TABLE_HPP
 #define HASH_TABLE_HPP
 
+#include <x86intrin.h>
+
 #ifndef HT_ELEM_T
 typedef const char* HT_ELEM_T;
 #endif
@@ -157,7 +159,7 @@ void HashTable_insert(HashTable* table, hash_t hash, HT_ELEM_T value, ht_compar_
         if (List_inflate(list, list->capacity * 2, err_code)) return;
     }
 
-    List_insert(list, value, List_find_position(list, (int) list->size), err_code);
+    List_insert(list, value, List_find_position(list, -1), err_code);
 }
 
 List* HashTable_find(const HashTable* table, hash_t hash) {
@@ -171,10 +173,26 @@ HT_ELEM_T* HashTable_find_value(const HashTable* table, hash_t hash, HT_ELEM_T v
     List* bucket = &table->contents[hash % table->size];
     _ListCell* iterator = &bucket->buffer[0];
 
-    for (size_t elem_id = 0; elem_id < bucket->size; ++elem_id) {
+    #if OPTIM_LVL == 0
+    for (size_t elem_id = 0; elem_id < bucket->size; ++elem_id, ++iterator) {
         if (iterator->content != HT_ELEM_POISON && comparator(iterator->content, value) == 0) return &iterator->content;
-        iterator = iterator->next;
     }
+    #endif
+
+    #if OPTIM_LVL >= 1
+    __m256i search_word_l = _mm256_loadu_si256((const __m256i_u*)value);
+    __m256i search_word_r = _mm256_loadu_si256((const __m256i_u*)value + 1);
+
+    for (size_t elem_id = 0; elem_id < bucket->size; ++elem_id, ++iterator) {
+        if (iterator->content == HT_ELEM_POISON) continue;
+
+        __m256i word_l = _mm256_loadu_si256((const __m256i_u*)iterator->content);
+        __m256i word_r = _mm256_loadu_si256((const __m256i_u*)iterator->content + 1);
+        if (_mm256_testc_si256(word_l, search_word_l) && _mm256_testc_si256(word_r, search_word_r)) {
+            return &iterator->content;
+        }
+    }
+    #endif
 
     return NULL;
 }

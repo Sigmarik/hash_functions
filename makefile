@@ -57,17 +57,23 @@ LIB_OBJECTS = lib/util/argparser.o 				\
 
 all: main
 
-MAIN_OBJECTS = src/main.o 						\
+OPTIM_LVL = 0
+
+CORE_MAIN_OBJECTS = src/main.o 					\
 			   src/utils/main_utils.o 			\
 			   src/hash/hash_functions.cpp		\
 			   src/text_parser/text_parser.cpp	\
 			   src/utils/common_utils.o $(LIB_OBJECTS)
+
+ifeq ($(OPTIM_LVL), 2)
+MAIN_OBJECTS = $(CORE_MAIN_OBJECTS) src/hash/hash_table_search.o
+else
+MAIN_OBJECTS = $(CORE_MAIN_OBJECTS)
+endif
 main: asset $(addprefix $(PROJ_DIR)/, $(MAIN_OBJECTS))
 	@mkdir -p $(BLD_FOLDER)
+	@echo Assembling files $(MAIN_OBJECTS)
 	@$(CC) $(addprefix $(PROJ_DIR)/, $(MAIN_OBJECTS)) $(CPPFLAGS) -o $(BLD_FOLDER)/$(MAIN_BLD_FULL_NAME)
-
-OPTIM_LVL = 0
-REPETITION = 1
 
 bmark: asset
 	make CASE_FLAGS="-D TESTED_HASH=murmur_hash -D OPTIM_LVL=$(OPTIM_LVL) -D PERFORMANCE_TEST" CPPFLAGS="$(CPP_BASE_FLAGS)"
@@ -88,6 +94,11 @@ FLAGS = $(CPPFLAGS) $(CASE_FLAGS)
 	@echo Building file $^
 	@$(CC) $(FLAGS) -c $^ -o $@ > $(BUILD_LOG_NAME)
 
+LST_NAME = asm_listing.log
+%.o: %.s
+	@echo Building assembly file $^
+	@nasm -f elf64 -l $(LST_NAME) $^ -o $@ > $(BUILD_LOG_NAME)
+
 PROFILER_OUTPUT_FILE = callgrind.log
 PROFILER_FLAGS = --tool=callgrind --callgrind-out-file=$(PROFILER_OUTPUT_FILE)
 ANNOTATOR = callgrind_annotate
@@ -97,6 +108,9 @@ ANNOTATOR_OUTPUT = profile.log
 profile: $(BLD_FOLDER)/$(MAIN_BLD_FULL_NAME)
 	cd $(BLD_FOLDER) && $(PROFILER) $(PROFILER_FLAGS) ./$(MAIN_BLD_FULL_NAME) $(ARGS)
 	$(ANNOTATOR) $(ANNOTATOR_FLAGS) $(BLD_FOLDER)/$(PROFILER_OUTPUT_FILE) > $(BLD_FOLDER)/$(ANNOTATOR_OUTPUT)
+
+debug: $(BLD_FOLDER)/$(MAIN_BLD_FULL_NAME)
+	cd $(BLD_FOLDER) && radare2 -d ./$(MAIN_BLD_FULL_NAME) $(ARGS)
 
 clean:
 	@find . -type f -name "*.o" -delete

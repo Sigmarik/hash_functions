@@ -45,6 +45,8 @@ struct HashTable {
     List* contents = NULL;
 };
 
+size_t test = sizeof(_ListCell);
+
 
 //* DECLARATIONS
 
@@ -90,16 +92,21 @@ void HashTable_insert(HashTable* table, hash_t hash, HT_ELEM_T value, ht_compar_
  */
 List* HashTable_find(const HashTable* table, hash_t hash);
 
+#if OPTIM_LVL < 2
 /**
  * @brief Find element in hash table by its hash and value
  * 
  * @param table hash table to search in
- * @param hash hash if the element
+ * @param hash hash of the element
  * @param value exact value of the element
  * @param comparator comparator function between elements (should return 0 on equality)
  * @return pointer to the element cell in table (NULL if the element was not found)
  */
 HT_ELEM_T* HashTable_find_value(const HashTable* table, hash_t hash, HT_ELEM_T value, ht_compar_fn_t* comparator);
+#else
+extern HT_ELEM_T* HashTable_find_value(const HashTable* table, hash_t hash, HT_ELEM_T value, ht_compar_fn_t* comparator) __asm__ ("HashTable_find_value");
+#endif
+
 
 //* IMPLEMENTATIONS
 
@@ -167,6 +174,7 @@ List* HashTable_find(const HashTable* table, hash_t hash) {
     return &table->contents[hash % table->size];
 }
 
+#if OPTIM_LVL < 2
 HT_ELEM_T* HashTable_find_value(const HashTable* table, hash_t hash, HT_ELEM_T value, ht_compar_fn_t* comparator) {
     _LOG_FAIL_CHECK_(HashTable_status(table) == 0, "error", ERROR_REPORTS, return NULL, NULL, EINVAL);
 
@@ -196,5 +204,6 @@ HT_ELEM_T* HashTable_find_value(const HashTable* table, hash_t hash, HT_ELEM_T v
 
     return NULL;
 }
+#endif
 
 #endif

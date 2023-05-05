@@ -63,7 +63,6 @@ CORE_MAIN_OBJECTS = src/main.o 					\
 			   src/utils/main_utils.o 			\
 			   src/hash/hash_functions.cpp		\
 			   src/text_parser/text_parser.cpp	\
-			   src/hash/hash_table.cpp			\
 			   src/utils/common_utils.o $(LIB_OBJECTS)
 
 ifeq ($(OPTIMIZATION_LEVEL), 2)

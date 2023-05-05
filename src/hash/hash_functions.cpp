@@ -32,7 +32,7 @@ HASH_FUNCTION(sum_hash) {
 HASH_FUNCTION(left_shift_hash) {
     hash_t sum = 0;
     for (char* ptr = (char*) begin; ptr < (char*) end; ++ptr) {
-        sum = cycle_left(sum, 1) + (hash_t) *ptr;
+        sum = cycle_left(sum, 1) ^ (hash_t) *ptr;
     }
     return sum;
 }
@@ -40,7 +40,7 @@ HASH_FUNCTION(left_shift_hash) {
 HASH_FUNCTION(right_shift_hash) {
     hash_t sum = 0;
     for (char* ptr = (char*) begin; ptr < (char*) end; ++ptr) {
-        sum = cycle_right(sum, 1) + (hash_t) *ptr;
+        sum = cycle_right(sum, 1) ^ (hash_t) *ptr;
     }
     return sum;
 }

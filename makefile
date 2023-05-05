@@ -26,7 +26,7 @@ CPP_SANITIZER_FLAGS = -fcheck-new 													\
 
 CPP_DEBUG_FLAGS = -D _DEBUG
 
-CPPFLAGS = $(CPP_BASE_FLAGS) $(CPP_DEBUG_FLAGS)
+CPPFLAGS = $(CPP_BASE_FLAGS)
 
 BLD_FOLDER = build
 ASSET_FOLDER = assets
@@ -57,15 +57,16 @@ LIB_OBJECTS = lib/util/argparser.o 				\
 
 all: main
 
-OPTIM_LVL = 0
+OPTIMIZATION_LEVEL = 0
 
 CORE_MAIN_OBJECTS = src/main.o 					\
 			   src/utils/main_utils.o 			\
 			   src/hash/hash_functions.cpp		\
 			   src/text_parser/text_parser.cpp	\
+			   src/hash/hash_table.cpp			\
 			   src/utils/common_utils.o $(LIB_OBJECTS)
 
-ifeq ($(OPTIM_LVL), 2)
+ifeq ($(OPTIMIZATION_LEVEL), 2)
 MAIN_OBJECTS = $(CORE_MAIN_OBJECTS) src/hash/hash_table_search.o
 else
 MAIN_OBJECTS = $(CORE_MAIN_OBJECTS)
@@ -76,10 +77,10 @@ main: asset $(addprefix $(PROJ_DIR)/, $(MAIN_OBJECTS))
 	@$(CC) $(addprefix $(PROJ_DIR)/, $(MAIN_OBJECTS)) $(CPPFLAGS) -o $(BLD_FOLDER)/$(MAIN_BLD_FULL_NAME)
 
 bmark: asset
-	make CASE_FLAGS="-D TESTED_HASH=murmur_hash -D OPTIM_LVL=$(OPTIM_LVL) -D PERFORMANCE_TEST" CPPFLAGS="$(CPP_BASE_FLAGS)"
+	make CASE_FLAGS="-D TESTED_HASH=murmur_hash -D OPTIMIZATION_LEVEL=$(OPTIMIZATION_LEVEL) -D PERFORMANCE_TEST" CPPFLAGS="$(CPP_BASE_FLAGS)"
 
 pfile: asset
-	make CASE_FLAGS="-D TESTED_HASH=murmur_hash -D OPTIM_LVL=$(OPTIM_LVL) -D TEST_COUNT=10 -D TEST_REPETITION=1 -D PERFORMANCE_TEST" CPPFLAGS="$(CPP_BASE_FLAGS)"
+	make CASE_FLAGS="-D TESTED_HASH=murmur_hash -D OPTIMIZATION_LEVEL=$(OPTIMIZATION_LEVEL) -D TEST_COUNT=10 -D TEST_REPETITION=1 -D PERFORMANCE_TEST" CPPFLAGS="$(CPP_BASE_FLAGS)"
 
 asset:
 	@mkdir -p $(BLD_FOLDER)

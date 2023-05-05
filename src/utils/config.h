@@ -20,7 +20,11 @@ static const char DEFAULT_SAMPLE_NAME[] = "sample.wordlist";
 static const char OUTPUT_TABLE_NAME[] = "output.csv";
 static const char OUTPUT_TIMETABLE_NAME[] = "bmark.csv";
 
-static const unsigned MAX_WORD_LENGTH = 64;
+static const unsigned MAX_WORD_LENGTH = 32;
+
+#ifndef OPTIMIZATION_LEVEL
+#define OPTIMIZATION_LEVEL 1
+#endif
 
 #ifndef BUCKET_COUNT
     static const unsigned BUCKET_COUNT = 17;

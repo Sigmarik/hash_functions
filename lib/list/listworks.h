@@ -25,7 +25,13 @@ _ListCell* _List_ptr_by_index(List* list, size_t index, int id);
 void List_ctor(List* list, size_t capacity, int* const err_code) {
     _LOG_FAIL_CHECK_(check_ptr(list), "error", ERROR_REPORTS, return, err_code, EFAULT);
 
+    #if OPTIMIZATION_LEVEL < 1  //! WARNING: THIS PREPROCESSING CODE IS TASK-SPECIFIC!
     list->buffer = (_ListCell*) calloc(capacity, sizeof(*list->buffer));
+    #else
+    list->buffer = NULL;
+    int alloc_status = posix_memalign((void**)&list->buffer, 32, capacity * sizeof(*list->buffer));
+    _LOG_FAIL_CHECK_(alloc_status == 0, "error", ERROR_REPORTS, return, err_code, ENOMEM);
+    #endif
 
     _LOG_FAIL_CHECK_(list->buffer, "error", ERROR_REPORTS, return, err_code, ENOMEM);
 
@@ -162,6 +168,14 @@ list_position_t List_insert(List* const list, const list_elem_t elem, const list
     return (list_position_t)(pasted_cell - list->buffer);
 }
 
+list_position_t List_push(List* const list, const list_elem_t elem, int* const err_code) {
+    if (list->size >= list->capacity - 1) {
+        if (List_inflate(list, list->capacity * 2, err_code)) return 0;
+    }
+
+    return List_insert(list, elem, List_find_position(list, -1), err_code);
+}
+
 list_position_t List_find_position(List* const list, const int index, int* const err_code) {
     _LOG_FAIL_CHECK_(List_status(list) == 0, "error", ERROR_REPORTS, return 0, err_code, EFAULT);
 
@@ -195,9 +209,9 @@ list_position_t List_find_position(List* const list, const int index, int* const
 }
 
 list_elem_t List_get(List* const list, const list_position_t position, int* const err_code) {
-    _LOG_FAIL_CHECK_(List_status(list) == 0,          "error", ERROR_REPORTS, return 0, err_code, EFAULT);
-    _LOG_FAIL_CHECK_(position < list->capacity,       "error", ERROR_REPORTS, return 0, err_code, EINVAL);
-    _LOG_FAIL_CHECK_(list->first_empty->next != NULL, "error", ERROR_REPORTS, return 0, err_code, ENOMEM);
+    _LOG_FAIL_CHECK_(List_status(list) == 0,          "error", ERROR_REPORTS, return LIST_ELEM_POISON, err_code, EFAULT);
+    _LOG_FAIL_CHECK_(position < list->capacity,       "error", ERROR_REPORTS, return LIST_ELEM_POISON, err_code, EINVAL);
+    _LOG_FAIL_CHECK_(list->first_empty->next != NULL, "error", ERROR_REPORTS, return LIST_ELEM_POISON, err_code, ENOMEM);
 
     return (list->buffer + position)->content;
 }
@@ -208,7 +222,9 @@ void List_remove(List* const list, const list_position_t position, int* const er
     _LOG_FAIL_CHECK_(list->first_empty->next != NULL, "error", ERROR_REPORTS, return, err_code, ENOMEM);
     _LOG_FAIL_CHECK_(list->size > 0,                  "error", ERROR_REPORTS, return, err_code, ENOENT);
 
+    #if OPTIMIZATION_LEVEL < 1  //! WARNING: THIS PREPROCESSING CODE IS TASK-SPECIFIC!
     _LOG_FAIL_CHECK_(list->buffer[position].content != LIST_ELEM_POISON, "error", ERROR_REPORTS, return, err_code, EFAULT);
+    #endif
 
     _ListCell* cell = list->buffer + position;
 
@@ -313,10 +329,12 @@ void _List_dump(List* const list, const unsigned int importance, const int line,
 
     for (size_t id = 0; id < list->capacity; id++) {
         unsigned char* data_start = (unsigned char*)(list->buffer + id);
+        #if OPTIMIZATION_LEVEL < 1  //! WARNING: THIS PREPROCESSING CODE IS TASK-SPECIFIC!
         _log_printf(importance, LIST_DUMP_TAG, "\t\t[%5ld] = %02X %02X %02X %02X (%s), next [%lld], prev [%lld]\n", (long) id,
             data_start[0], data_start[1], data_start[2], data_start[3],
             list->buffer[id].content == LIST_ELEM_POISON ? "POISON" : "VALUE",
             (long long) (list->buffer[id].next - list->buffer), (long long) (list->buffer[id].prev - list->buffer));
+        #endif
     }
 }
 

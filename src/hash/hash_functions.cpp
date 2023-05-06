@@ -1,6 +1,7 @@
 #include "hash_functions.h"
 
 #include <string.h>
+#include <inttypes.h>
 
 #include "lib/util/dbg/debug.h"
 #include "src/utils/config.h"
@@ -55,4 +56,8 @@ HASH_FUNCTION(murmur_hash) {
         value = current;
     }
     return value;
+}
+
+hash_t mean_ascii_hash(const void* begin, const void* end) {
+    return sum_hash(begin, end) / ((uintptr_t) end - (uintptr_t) begin);
 }

@@ -76,7 +76,7 @@ int main(const int argc, const char** argv) {
     for (const char* word_ptr = word_list;
         word_ptr < word_list + sample_size * MAX_WORD_LENGTH;
         word_ptr += MAX_WORD_LENGTH) {
-        
+
         #if OPTIMIZATION_LEVEL < 1
         HashTable_insert(&table, TESTED_HASH(word_ptr, word_ptr + MAX_WORD_LENGTH), word_ptr, strcmp);
         #else

@@ -35,6 +35,6 @@ static const unsigned MAX_WORD_LENGTH = 32;
 #endif
 
 #ifndef TEST_REPETITION
-    static const unsigned TEST_REPETITION = 128;
+    static const unsigned TEST_REPETITION = 2048;
 #endif
 #endif

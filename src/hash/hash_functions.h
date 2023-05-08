@@ -22,6 +22,4 @@ hash_t left_shift_hash  (const void* begin, const void* end);
 hash_t right_shift_hash (const void* begin, const void* end);
 hash_t murmur_hash      (const void* begin, const void* end);
 
-hash_t mean_ascii_hash  (const void* begin, const void* end);
-
 #endif

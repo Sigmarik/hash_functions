@@ -111,8 +111,9 @@ extern HT_ELEM_T* HashTable_find_value(const HashTable* table, hash_t hash, HT_E
 //* IMPLEMENTATIONS ==============================
 
 void HashTable_ctor(HashTable* table, err_anchor_t err_code) {
+    _LOG_FAIL_CHECK_(table, "error", ERROR_REPORTS, return, err_code, EINVAL);
+
     table->contents = (List*) calloc(BUCKET_COUNT, sizeof(*table->contents));
-    // TODO: check if `table` is NULL
 
     if (!table->contents) {
         *err_code = ENOMEM;
@@ -134,7 +135,7 @@ void HashTable_ctor(HashTable* table, err_anchor_t err_code) {
 }
 
 void HashTable_dtor(HashTable* table) {
-    if (HashTable_status(table)) return;
+    _LOG_FAIL_CHECK_(HashTable_status(table) == 0, "error", ERROR_REPORTS, return, NULL, EINVAL);
 
     for (size_t id = 0; id < BUCKET_COUNT; id++) {
         List_dtor(&table->contents[id], NULL);
@@ -143,7 +144,6 @@ void HashTable_dtor(HashTable* table) {
     free(table->contents);
 }
 
-// TODO: Wrap every call of this function in macro (disable on release)
 ht_status_t HashTable_status(const HashTable* table) {
     if (!table) return HT_NULL;
     if (!table->contents) return HT_NO_CONTENT;
@@ -183,7 +183,6 @@ HT_ELEM_T* HashTable_find_value(const HashTable* table, hash_t hash, HT_ELEM_T v
     _ListCell* iterator = &bucket->buffer[0];
 
     #if OPTIMIZATION_LEVEL == 0
-    // TODO: Move the segment below to separate function inside `listworks` module
     for (size_t elem_id = 0; elem_id < bucket->size; ++elem_id, ++iterator) {
         if (iterator->content != HT_ELEM_POISON && comparator(iterator->content, value) == 0) return &iterator->content;
     }

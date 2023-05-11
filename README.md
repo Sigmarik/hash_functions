@@ -28,10 +28,9 @@ As said, the main purpose of the project was comparison of different hash functi
 
 Experiment reports:
  - RUS: [DISTRIBUTION_RESULTS_RUS.md](DISTRIBUTION_RESULTS_RUS.md)
- - ENG: *will be soon*
 
 Optimization experiment report:
- - RUS: []
+ - RUS: [PERFORMANCE_RESULTS_RUS.md](PERFORMANCE_RESULTS_RUS.md)
 
 ## Code of Conduct
 For information about our community goals read **CODE_OF_CONDUCT.md**.

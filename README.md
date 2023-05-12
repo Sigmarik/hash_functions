@@ -33,11 +33,11 @@ Optimization experiment report:
  - RUS: [PERFORMANCE_RESULTS_RUS.md](PERFORMANCE_RESULTS_RUS.md)
 
 ## Code of Conduct
-For information about our community goals read **CODE_OF_CONDUCT.md**.
+For information about our community goals read [**CODE_OF_CONDUCT.md**](CODE_OF_CONDUCT.md).
 ## Licensing
-Project is distributed under MIT license. More licensing information is specified in file **LICENSE**.
+Project is distributed under MIT license. More licensing information is specified in file [**LICENSE**](LICENSE).
 ## Contributing
 We don't think anyone will be contributing to this project as it was made purely for educational purposes.
-But if you still want to contribute you can learn how to do so by reading the file **CONTRIBUTING.md**.
+But if you still want to contribute you can learn how to do so by reading the file [**CONTRIBUTING.md**](CONTRIBUTING.md).
 ## Contacts
 **(author)** Kudryashov Ilya - *kudriashov.it@phystech.edu*

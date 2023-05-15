@@ -58,7 +58,7 @@
  - $x|_{[0, \dots ,\text{len}(x)-1)}$ - строка $x$ кроме последнего символа,
  - $\text{rol}(t)$ - циклический побитовый сдвиг числа $t$ влево,
  - $\text{ror}(t)$ - циклический побитовый сдвиг числа $t$ вправо,
- - $\otimes$ - побитовая операция исключающего "или".
+ - $\otimes$ - операция побитового исключающего "или".
 
 Реализации хеш-функций приведены в файле [src/hash/hash_functions.cpp](src/hash/hash_functions.cpp).
 
@@ -68,39 +68,39 @@
 После распределения слов по спискам хеш-таблицы в соответствии с хешами, выданными тестируемой хеш-функцией, программа измеряла длины получившихся списков и записывала измерения в файл в виде таблицы в формате `csv`.
 
 ## Результаты
-Результаты измерений представлены на рисунках 3 - 9.
+Результаты измерений представлены на рисунках 3 - 8.
 
-| ![article_assets/distr_const_hash.png](article_assets/distr_const_hash.png) |
-| --- |
-| *Рисунок 1. Гистограмма распределения, даваемого `const_hash`.* |
+| ![histogram](article_assets/distr_const_hash.png) | ![histogram](article_assets/distr_const_hash_zm.png) |
+| --- | --- |
+| *Рисунок 1а. Гистограмма распределения, даваемого `const_hash`.* | *Рисунок 1б. Участок гистограммы распределения, даваемого `const_hash`.* |
 
-| ![article_assets/distr_first_char_hash.png](article_assets/distr_first_char_hash.png) |
-| --- |
-| *Рисунок 2. Гистограмма распределения, даваемого `first_char_hash`.* |
+| ![histogram](article_assets/distr_first_char_hash.png) | ![histogram](article_assets/distr_first_char_hash_zm.png) |
+| --- | --- |
+| *Рисунок 2а. Гистограмма распределения, даваемого `first_char_hash`.* | *Рисунок 2б. Участок гистограммы распределения, даваемого `first_char_hash`.* |
 
-| ![article_assets/distr_length_hash.png](article_assets/distr_length_hash.png) |
-| --- |
-| *Рисунок 3. Гистограмма распределения, даваемого `length_hash`.* |
+| ![histogram](article_assets/distr_length_hash.png) | ![histogram](article_assets/distr_length_hash_zm.png) |
+| --- | --- |
+| *Рисунок 3а. Гистограмма распределения, даваемого `length_hash`.* | *Рисунок 3б. Гистограмма распределения, даваемого `length_hash`.* |
 
-| ![article_assets/distr_sum_hash.png](article_assets/distr_sum_hash.png) |
+| ![histogram](article_assets/distr_sum_hash.png) |
 | --- |
 | *Рисунок 4. Гистограмма распределения, даваемого `sum_hash`.* |
 
-| ![article_assets/distr_left_shift_hash.png](article_assets/distr_left_shift_hash.png) |
+| ![histogram](article_assets/distr_left_shift_hash.png) |
 | --- |
 | *Рисунок 5. Гистограмма распределения, даваемого `left_shift_hash`.* |
 
-| ![article_assets/distr_right_shift_hash.png](article_assets/distr_right_shift_hash.png) |
+| ![histogram](article_assets/distr_right_shift_hash.png) |
 | --- |
 | *Рисунок 6. Гистограмма распределения, даваемого `right_shift_hash`.* |
 
-| ![article_assets/distr_murmur_hash.png](article_assets/distr_murmur_hash.png) |
+| ![histogram](article_assets/distr_murmur_hash.png) |
 | --- |
 | *Рисунок 7. Гистограмма распределения, даваемого `murmur_hash`.* |
 
-| ![article_assets/stat_deviation_all.png](article_assets/stat_deviation_all.png) | ![article_assets/stat_max_all.png](article_assets/stat_max_all.png) |
+| ![stat_hist](article_assets/stat_deviation_all.png) | ![stat_hist](article_assets/stat_max_all.png) |
 | --- | --- |
-| *Рисунок 8. Сравнительная гистограмма среднеквадратических отклонений длин списков от всех исследованных хеш-функций.* | *Рисунок 9. Сравнительная гистограмма максимумов длин списков от всех исследованных хеш-функций.* |
+| *Рисунок 8а. Сравнительная гистограмма среднеквадратических отклонений длин списков от всех исследованных хеш-функций.* | *Рисунок 8б. Сравнительная гистограмма максимумов длин списков от всех исследованных хеш-функций.* |
 
 ## Выводы и обсуждение
 Как можно заметить, распределения, даваемые `sum_hash`, `left_shift_hash`, `right_shift_hash` и `murmur_hash` обладают наименьшими максимальными длинами списков и стандартными отклонениями. Среди них функцией, дающей наименьшее по максимальной длине и стандартному отклонению распределение является `murmur_hash`.

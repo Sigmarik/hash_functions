@@ -50,15 +50,16 @@
 Флаги компиляции: `-ggdb3 -std=c++2a -O2 -pie -march=corei7 -mavx2` (из списка были исключены флаги типов `-I` и `-W`, полный список флагов см. в файле [makefile](makefile)).
 
 Условия запуска:
- - Ноутбук Lenovo Legion 15ARH05H, подключенный к снабжающей его сети электропитания
+ - Ноутбук Lenovo Legion 15ARH05H, подключенный к снабжающей его сети электропитания,
 ```
 Processor	AMD Ryzen 5 4600H with Radeon Graphics            3.00 GHz
 Installed RAM	16.0 GB (15.9 GB usable)
 Product ID	00325-81942-83222-AAOEM
 System type	64-bit operating system, x64-based processor
 ```
- - ОС: Windows 10 Home 22H2 (Build 19045.2846).
- - WSL: Ubuntu 20.04.5 LTS
+ - ОС: Windows 10 Home 22H2 (Build 19045.2846),
+ - WSL: Ubuntu 20.04.5 LTS,
+ - Температура процессора в момент тестирования не превышала 67 градусов.
 
 ## Результаты
 Результат работы не оптимизированной программы можно найти в файле [results/bmark_0.csv].(results/bmark_0.csv).

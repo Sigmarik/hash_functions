@@ -92,7 +92,6 @@ void HashTable_insert(HashTable* table, hash_t hash, HT_ELEM_T value, ht_compar_
  */
 List* HashTable_find(const HashTable* table, hash_t hash);
 
-#if OPTIMIZATION_LEVEL < 2
 /**
  * @brief Find element in hash table by its hash and value
  * 
@@ -103,9 +102,6 @@ List* HashTable_find(const HashTable* table, hash_t hash);
  * @return pointer to the element cell in table (NULL if the element was not found)
  */
 HT_ELEM_T* HashTable_find_value(const HashTable* table, hash_t hash, HT_ELEM_T value, ht_compar_fn_t* comparator);
-#else
-extern HT_ELEM_T* HashTable_find_value(const HashTable* table, hash_t hash, HT_ELEM_T value, ht_compar_fn_t* comparator) __asm__ ("HashTable_find_value");
-#endif
 
 
 //* IMPLEMENTATIONS ==============================
@@ -175,7 +171,6 @@ List* HashTable_find(const HashTable* table, hash_t hash) {
     return &table->contents[hash % BUCKET_COUNT];
 }
 
-#if OPTIMIZATION_LEVEL < 2
 HT_ELEM_T* HashTable_find_value(const HashTable* table, hash_t hash, HT_ELEM_T value, ht_compar_fn_t* comparator) {
     _LOG_FAIL_CHECK_(HashTable_status(table) == 0, "error", ERROR_REPORTS, return NULL, NULL, EINVAL);
 
@@ -201,6 +196,5 @@ HT_ELEM_T* HashTable_find_value(const HashTable* table, hash_t hash, HT_ELEM_T v
 
     return NULL;
 }
-#endif
 
 #endif

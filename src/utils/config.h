@@ -23,18 +23,18 @@ static const char OUTPUT_TIMETABLE_NAME[] = "bmark.csv";
 static const unsigned MAX_WORD_LENGTH = 32;
 
 #ifndef OPTIMIZATION_LEVEL
-#define OPTIMIZATION_LEVEL 1
+#define OPTIMIZATION_LEVEL 0
 #endif
 
 #ifndef BUCKET_COUNT
-    static const unsigned BUCKET_COUNT = 17;
+    static const unsigned BUCKET_COUNT = 2027;
 #endif
 
 #ifndef TEST_COUNT
-    static const unsigned TEST_COUNT = 32;
+    static const unsigned TEST_COUNT = 30;
 #endif
 
 #ifndef TEST_REPETITION
-    static const unsigned TEST_REPETITION = 2048;
+    static const unsigned TEST_REPETITION = 2000;
 #endif
 #endif

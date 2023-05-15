@@ -20,6 +20,11 @@ hash_t length_hash      (const void* begin, const void* end);
 hash_t sum_hash         (const void* begin, const void* end);
 hash_t left_shift_hash  (const void* begin, const void* end);
 hash_t right_shift_hash (const void* begin, const void* end);
+
+#if OPTIMIZATION_LEVEL < 2
 hash_t murmur_hash      (const void* begin, const void* end);
+#else
+extern hash_t murmur_hash(const void* begin, const void* end);
+#endif
 
 #endif

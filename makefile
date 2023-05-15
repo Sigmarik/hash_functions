@@ -65,8 +65,8 @@ CORE_MAIN_OBJECTS = src/main.o 					\
 			   src/text_parser/text_parser.cpp	\
 			   src/utils/common_utils.o $(LIB_OBJECTS)
 
-ifeq ($(OPTIMIZATION_LEVEL), 2)
-MAIN_OBJECTS = $(CORE_MAIN_OBJECTS) src/hash/hash_table_search.o
+ifeq ($(OPTIMIZATION_LEVEL), 3)
+MAIN_OBJECTS = $(CORE_MAIN_OBJECTS) src/hash/asm_replacement.o
 else
 MAIN_OBJECTS = $(CORE_MAIN_OBJECTS)
 endif
@@ -105,8 +105,12 @@ ANNOTATOR = callgrind_annotate
 ANNOTATOR_FLAGS = --auto=yes
 ANNOTATOR_OUTPUT = profile.log
 
-profile: $(BLD_FOLDER)/$(MAIN_BLD_FULL_NAME)
+profile: $(BLD_FOLDER)/$(ANNOTATOR_OUTPUT)
+
+$(BLD_FOLDER)/$(PROFILER_OUTPUT_FILE): $(BLD_FOLDER)/$(MAIN_BLD_FULL_NAME)
 	cd $(BLD_FOLDER) && $(PROFILER) $(PROFILER_FLAGS) ./$(MAIN_BLD_FULL_NAME) $(ARGS)
+
+$(BLD_FOLDER)/$(ANNOTATOR_OUTPUT): $(BLD_FOLDER)/$(PROFILER_OUTPUT_FILE)
 	$(ANNOTATOR) $(ANNOTATOR_FLAGS) $(BLD_FOLDER)/$(PROFILER_OUTPUT_FILE) > $(BLD_FOLDER)/$(ANNOTATOR_OUTPUT)
 
 debug: $(BLD_FOLDER)/$(MAIN_BLD_FULL_NAME)

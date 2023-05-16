@@ -42,12 +42,12 @@
   
   $\text{len}(x)=0 \Rightarrow h(x)=0$
   
-  $\text{len}(x)>0 \Rightarrow h(x)=\text{rol}(h(x|_{[0, \dots ,\text{len}(x)-1)}))\otimes x_{\text{len}(x)-1}$,
+  $\text{len}(x)>0 \Rightarrow h(x)=\text{rol}(h(x_{[0, \dots ,\text{len}(x)-1)}))\otimes x_{\text{len}(x)-1}$,
  - `right_shift_hash`: аналогично `left_shift_hash`, но сдвиг происходит вправо,
  
   $\text{len}(x)=0 \Rightarrow h(x)=0$
   
-  $\text{len}(x)>0 \Rightarrow h(x)=\text{ror}(h(x|_{[0, .. ,\text{len}(x)-1)}))\otimes x_{\text{len}(x)-1}$,
+  $\text{len}(x)>0 \Rightarrow h(x)=\text{ror}(h(x_{[0, .. ,\text{len}(x)-1)}))\otimes x_{\text{len}(x)-1}$,
  - `murmur_hash`: функция хеширования MurmurHash64
 
 Использованные обозначения:
@@ -55,7 +55,7 @@
  - $x$ - ключ (строка символов $x_1,x_2,\dots,x_{\text{len}(x)-1}$),
  - $x_i$ - $i$-й символ строки $x$ (в нумерации с 0)
  - $\text{len}(x)$ - длина строки $x$,
- - $x|_{[0, \dots ,\text{len}(x)-1)}$ - строка $x$ кроме последнего символа,
+ - $x_{[0, \dots ,\text{len}(x)-1)}$ - строка $x$ кроме последнего символа,
  - $\text{rol}(t)$ - циклический побитовый сдвиг числа $t$ влево,
  - $\text{ror}(t)$ - циклический побитовый сдвиг числа $t$ вправо,
  - $\otimes$ - операция побитового исключающего "или".

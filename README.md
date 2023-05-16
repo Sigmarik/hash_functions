@@ -7,11 +7,7 @@ The main purpose of the project was
 1. Comparing different hash functions by their value distributions.
 2. Researching ways of hash table optimization.
 
-Distribution experiment reports:
- - RUS: [DISTRIBUTION_RESULTS_RUS.md](DISTRIBUTION_RESULTS_RUS.md)
-
-Optimization experiment report:
- - RUS: [PERFORMANCE_RESULTS_RUS.md](PERFORMANCE_RESULTS_RUS.md)
+Experiment report can be found in file [REPORT.md](REPORT.md) (RUS).
 
 ## Building
 

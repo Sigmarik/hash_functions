@@ -1,5 +1,6 @@
 # WARNING: The code below is just a rough version of file formatter for this project!
-#   In no circumstances this code should be considered a part of the project or treated as such!
+#   In no circumstances this code should be considered a main part of the project or treated as such!
+#   It belongs here for demonstrational purposes only!
 #   It is recommended to use other text-to-wordlist formatters available.
 
 file = open("assets/comedy_of_errors.txt", "r")
@@ -21,5 +22,5 @@ file.close()
 
 
 out = open("assets/sample.wordlist", "wb")
-out.write(b"".join([bytearray((word + '\0' * (64 - len(word))).encode("utf-8")) for word in words]))
+out.write(b"".join([bytearray((word + '\0' * (32 - len(word))).encode("utf-8")) for word in words]))
 out.close()

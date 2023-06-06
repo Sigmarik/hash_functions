@@ -14,13 +14,17 @@
 
 #include "hash.h"
 
-HASH_FUNCTION(constant_hash);
-HASH_FUNCTION(first_char_hash);
-HASH_FUNCTION(length_hash);
-HASH_FUNCTION(sum_hash);
-HASH_FUNCTION(left_shift_hash);
-HASH_FUNCTION(right_shift_hash);
+hash_t constant_hash    (const void* begin, const void* end);
+hash_t first_char_hash  (const void* begin, const void* end);
+hash_t length_hash      (const void* begin, const void* end);
+hash_t sum_hash         (const void* begin, const void* end);
+hash_t left_shift_hash  (const void* begin, const void* end);
+hash_t right_shift_hash (const void* begin, const void* end);
 
-HASH_FUNCTION(murmur_hash);
+#if OPTIMIZATION_LEVEL < 2
+hash_t murmur_hash      (const void* begin, const void* end);
+#else
+extern hash_t murmur_hash(const void* begin, const void* end);
+#endif
 
 #endif

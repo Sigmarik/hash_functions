@@ -35,10 +35,14 @@ typedef uintptr_t list_position_t;
  * 
  */
 struct _ListCell {
-    list_elem_t content = LIST_ELEM_POISON;
     _ListCell* next = NULL;
     _ListCell* prev = NULL;
+    list_elem_t content = LIST_ELEM_POISON;
+#if OPTIMIZATION_LEVEL < 1
 };
+#else
+} __attribute__((__aligned__(64)));
+#endif
 
 /**
  * @brief List data structure.
@@ -98,6 +102,16 @@ void List_linearize(List* const list, int* const err_code = NULL);
  * @param err_code variable to use as errno
  */
 list_position_t List_insert(List* const list, const list_elem_t elem, const list_position_t position, int* const err_code = NULL);
+
+/**
+ * @brief Push element to the back of the list.
+ * 
+ * @param list pointer to the list
+ * @param elem element to push
+ * @param err_code variable to use as errno
+ * @return 
+ */
+list_position_t List_push(List* const list, const list_elem_t elem, int* const err_code = NULL);
 
 /**
  * @brief Find position of the index'th element in the list.

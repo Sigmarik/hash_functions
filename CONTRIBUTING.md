@@ -1,14 +1,9 @@
-# Contributing to Text Sorter program
+# Contributing
 ## General information
 First of all, thank you for contributing to this wasteland of a project. 
 Second af all, it was not expected that anyone will ever make contributions to this. 
 And, finally, if you still want to commit changes, make sure you read README.md and CODE_OF_CONDUCT.md 
 as these files contain some important information about how you should not be an a*shole.
-## Language
-Primarily English (US). It also applies to comments, documentation, naming and messages.
-It also will be highly appreciated if you spot grammatical mistakes anywhere in the content of this repository and will be able to fix them.
-## Code Style
-We use code style that is close to pep8 for python, but for C++.
 
 ### Naming
 Variables and functions should be names in lower case.
